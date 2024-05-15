@@ -72,4 +72,12 @@
       </plugin>
     </plugins>
   </build>
+  
+<distributionManagement>
+<repository>
+ <id>maven-releases</id>
+ <url>https://hub.docker.com/r/arnab6119/maven</url>
+</repository>
+</distributionManagement>
+  
 </project>
