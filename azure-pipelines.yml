@@ -42,7 +42,7 @@ stages:
   - stage: Build
     jobs: 
     - job: Build
-      pool: 
+      pool: Default
       steps:
         - task: Maven@4
           inputs:
