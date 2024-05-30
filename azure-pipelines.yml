@@ -1,12 +1,12 @@
 ---
 trigger: 
 - main
+pool: Default
 
 stages:
   - stage: Complile
     jobs:
     - job: Compile
-      pool: default
       steps:
       - task: Maven@4
         inputs:
@@ -25,7 +25,6 @@ stages:
   - stage: Test
     jobs:
     - job: Test
-      pool: default
       steps:
       - task: Maven@4
         inputs:
@@ -42,7 +41,6 @@ stages:
   - stage: Build
     jobs: 
     - job: Build
-      pool: Default
       steps:
         - task: Maven@4
           inputs:
@@ -54,12 +52,6 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-        
-        - task: DownloadBuildArtifacts@1
-          inputs:
-            buildType: 'current'
-            downloadType: 'single'
-            artifactName: 'drop'
-            downloadPath: '$(System.ArtifactsDirectory)'
+
 
   
