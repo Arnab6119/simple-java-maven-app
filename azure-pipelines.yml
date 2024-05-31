@@ -54,7 +54,7 @@ stages:
             sonarQubeRunAnalysis: false
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: 'build'
+            PathtoPublish: 
             ArtifactName: 'drop'
             publishLocation: 'Container'
 
