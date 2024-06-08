@@ -4,39 +4,6 @@ trigger:
 pool: Default
 
 stages:
-  - stage: Complile
-    jobs:
-    - job: Compile
-      steps:
-      - task: Maven@4
-        inputs:
-          mavenPomFile: 'pom.xml'
-          goals: 'compile'
-          publishJUnitResults: false
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: false
-      
-    
-
-
-  - stage: Test
-    jobs:
-    - job: Test
-      steps:
-      - task: Maven@4
-        inputs:
-          mavenPomFile: 'pom.xml'
-          goals: 'test'
-          publishJUnitResults: true
-          testResultsFiles: '**/surefire-reports/TEST-*.xml'
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: false
           
   - stage: Build
     jobs: 
@@ -57,6 +24,11 @@ stages:
     - job: Publish
       pool: Default
       steps:
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(Build.Repository.LocalPath)/target'
+          Contents: '*.jar'
+          TargetFolder: '$(build.artifactstagingdirectory)'
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)'
