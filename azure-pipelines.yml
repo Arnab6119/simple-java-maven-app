@@ -31,7 +31,9 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'Maven_demo'
             publishLocation: 'Container'
-        
+        - task: MavenAuthenticate@0
+          inputs:
+            artifactsFeeds: 'Nike'
         - task: Maven@4
           inputs:
             mavenPomFile: 'pom.xml'
