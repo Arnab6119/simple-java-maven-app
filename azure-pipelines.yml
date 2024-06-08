@@ -31,4 +31,15 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)'
             ArtifactName: 'Maven_demo'
             publishLocation: 'Container'
+        
+        - task: Maven@4
+          inputs:
+            mavenPomFile: 'pom.xml'
+            goals: 'deploy'
+            publishJUnitResults: false
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: false
   
