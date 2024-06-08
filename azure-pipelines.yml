@@ -19,22 +19,16 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-  - stage: Publish
-    jobs:
-    - job: Publish
-      pool: Default
-      steps:
-      - task: CopyFiles@2
-        inputs:
-          SourceFolder: '$(Build.Repository.LocalPath)/target'
-          Contents: '*.jar'
-          TargetFolder: '$(build.artifactstagingdirectory)'
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'Maven_demo'
-          publishLocation: 'Container'
-        
 
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.Repository.LocalPath)/target'
+            Contents: '*.jar'
+            TargetFolder: '$(build.artifactstagingdirectory)'
 
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'Maven_demo'
+            publishLocation: 'Container'
   
