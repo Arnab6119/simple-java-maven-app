@@ -52,11 +52,22 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-        - task: PublishBuildArtifacts@1
+  - stage: Deploy
+    jobs:
+    - job: Deploy
+      pool: Default
+      steps:
+        - task: Maven@4
           inputs:
-            PathtoPublish: 
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+            mavenPomFile: 'pom.xml'
+            goals: 'deploy'
+            publishJUnitResults: true
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: false
 
 
   
