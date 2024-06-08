@@ -49,17 +49,6 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-        - task: CopyFiles@2
-          inputs:
-            SourceFolder: '$(Build.Repository.LocalPath)/target'
-            Contents: '*.jar'
-            TargetFolder: '$(build.artifactstagingdirectory)'
-
-        - task: PublishBuildArtifacts@1
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            ArtifactName: 'Maven_demo'
-            publishLocation: 'Container'
         - task: MavenAuthenticate@0
           inputs:
             artifactsFeeds: 'Nike'
