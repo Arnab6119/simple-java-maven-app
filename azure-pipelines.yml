@@ -34,6 +34,33 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
+  - stage: SourcecodeVurnerablitiesCheck
+    jobs:
+    - job: VurnerablitiesCheck
+      steps:
+      - task: AdvancedSecurity-Dependency-Scanning@1
+        
+  - stage: SourceCodeVurnerablitiesReport
+    jobs:
+    - job: Vurnerablitiesreport
+      steps:       
+      - task: AdvancedSecurity-Publish@1
+        
+  - stage: CodeQualityCheck
+    jobs:
+    - job: CodequalityCheck
+      steps:
+       - task: AdvancedSecurity-Codeql-Init@1
+         inputs:
+           languages: 'java'
+           querysuite: 'security-and-quality'
+
+  - stage: CodeQualityReport
+    jobs:
+    - job: Codequalityreport
+      steps:
+       - task: AdvancedSecurity-Codeql-Analyze@1
+
   - stage: Build
     jobs: 
     - job: Build
