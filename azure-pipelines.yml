@@ -2,6 +2,14 @@
 trigger: 
 - master
 pool: Default
+parameters:
+  - name: p1
+    type: string
+    default: true
+    values:
+      - true
+      - false
+    
 
 stages:
           
@@ -20,6 +28,8 @@ stages:
           effectivePomSkip: false
           sonarQubeRunAnalysis: false
   - stage: Test
+    dependsOn: Compile
+    condition: ${{eq (parameters.P1, true)}}
     jobs: 
     - job: Test
       steps:
