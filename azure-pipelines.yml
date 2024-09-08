@@ -45,18 +45,21 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
   - stage: SourcecodeVurnerablitiesCheck
+    trigger: manual
     jobs:
     - job: VurnerablitiesCheck
       steps:
       - task: AdvancedSecurity-Dependency-Scanning@1
         
   - stage: SourceCodeVurnerablitiesReport
+    trigger: manual
     jobs:
     - job: Vurnerablitiesreport
       steps:       
       - task: AdvancedSecurity-Publish@1
         
   - stage: CodeQualityCheck
+    trigger: manual
     jobs:
     - job: CodequalityCheck
       steps:
@@ -66,6 +69,7 @@ stages:
            querysuite: 'security-and-quality'
 
   - stage: CodeQualityReport
+    trigger: manual
     jobs:
     - job: Codequalityreport
       steps:
