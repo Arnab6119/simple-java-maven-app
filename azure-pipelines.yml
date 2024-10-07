@@ -50,6 +50,7 @@ stages:
     - job: Build
       steps:
         - task: Maven@4
+          displayName: Packagecreate
           inputs:
             mavenPomFile: 'pom.xml'
             goals: 'clean package'
@@ -60,9 +61,11 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
         - task: MavenAuthenticate@0
+          displayName: FeedAuthorization
           inputs:
             artifactsFeeds: 'Nike'
         - task: Maven@4
+          displayName: FeedUpload
           inputs:
             mavenPomFile: 'pom.xml'
             goals: 'deploy'
