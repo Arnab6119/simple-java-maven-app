@@ -3,7 +3,7 @@ trigger:
 - master
 pool: Default
 parameters:
-  - name: p1
+  - name: shouldrun
     type: string
     default: true
     values:
@@ -29,7 +29,7 @@ stages:
           sonarQubeRunAnalysis: false
   - stage: Test
     dependsOn: Compile
-    condition: ${{eq (parameters.P1, true)}}
+    condition: ${{eq (parameters.shouldrun, true)}}
     jobs: 
     - job: Test
       steps:
