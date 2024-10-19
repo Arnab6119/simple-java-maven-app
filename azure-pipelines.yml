@@ -2,41 +2,17 @@
 trigger: 
 - master
 pool: Default
-parameters:
-  - name: shouldrun
-    type: string
-    default: true
-    values:
-      - true
-      - false
-    
 
 stages:
-          
-  - stage: Compile
-    jobs: 
-    - job: Compile
-      steps:
-      - task: Maven@4
-        inputs:
-          mavenPomFile: 'pom.xml'
-          goals: 'compile'
-          publishJUnitResults: false
-          javaHomeOption: 'JDKVersion'
-          mavenVersionOption: 'Default'
-          mavenAuthenticateFeed: false
-          effectivePomSkip: false
-          sonarQubeRunAnalysis: false
-  - stage: Test
-    dependsOn: Compile
-    condition: ${{eq (parameters.shouldrun, true)}}
-    jobs: 
-    - job: Test
+  - stage: Build
+    jobs:
+    - job: buildingmavenapp
+      displayName: build
       steps:
         - task: Maven@4
           inputs:
             mavenPomFile: 'pom.xml'
-            goals: 'test'
+            goals: 'clean package'
             publishJUnitResults: true
             testResultsFiles: '**/surefire-reports/TEST-*.xml'
             javaHomeOption: 'JDKVersion'
@@ -44,35 +20,26 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-  - stage: Build
-    trigger: manual
-    jobs: 
-    - job: Build
+  - stage: scanningcodeql
+    jobs:
+    - job: scan
       steps:
-        - task: Maven@4
-          displayName: Packagecreate
-          inputs:
-            mavenPomFile: 'pom.xml'
-            goals: 'clean package'
-            publishJUnitResults: false
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-        - task: MavenAuthenticate@0
-          displayName: FeedAuthorization
-          inputs:
-            artifactsFeeds: 'Nike'
-        - task: Maven@4
-          displayName: FeedUpload
-          inputs:
-            mavenPomFile: 'pom.xml'
-            goals: 'deploy'
-            publishJUnitResults: false
-            javaHomeOption: 'JDKVersion'
-            mavenVersionOption: 'Default'
-            mavenAuthenticateFeed: false
-            effectivePomSkip: false
-            sonarQubeRunAnalysis: false
-  
+      - checkout: self
+      - task: SonarQubePrepare@6
+        inputs:
+          SonarQube: 'Sonarqube'
+          scannerMode: 'MSBuild'
+          projectKey: 'sqa_513a33184e8e4c24b5be6318ac283ff44434e005'
+          projectName: 'Maven'
+          extraProperties: |
+            # Additional properties that will be passed to the scanner, 
+            # Put one key=value per line, example:
+            # sonar.exclusions=**/*.bin
+            sonar.qualitygate.wait=true
+      - task: SonarQubeAnalyze@6
+        inputs:
+          jdkversion: 'JAVA_HOME_17_X64'
+      - task: SonarQubePublish@6
+        inputs:
+          pollingTimeoutSec: '300'
+
