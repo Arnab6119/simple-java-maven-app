@@ -4,7 +4,7 @@ trigger:
 pool: Default
 
 stages:
-  - stage: Build
+  - stage: Compile
     jobs:
     - job: buildingmavenapp
       displayName: build
@@ -12,7 +12,7 @@ stages:
         - task: Maven@4
           inputs:
             mavenPomFile: 'pom.xml'
-            goals: 'clean package'
+            goals: 'compile'
             publishJUnitResults: true
             testResultsFiles: '**/surefire-reports/TEST-*.xml'
             javaHomeOption: 'JDKVersion'
@@ -20,11 +20,10 @@ stages:
             mavenAuthenticateFeed: false
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
-  - stage: scanningcodeql
+  - stage: ScanningandBuild
     jobs:
     - job: scan
       steps:
-      - checkout: self
       - task: SonarQubePrepare@6
         inputs:
           SonarQube: 'Sonarqube'
@@ -36,6 +35,18 @@ stages:
             # Put one key=value per line, example:
             # sonar.exclusions=**/*.bin
             sonar.qualitygate.wait=true
+      - task: Maven@4
+        inputs:
+          mavenPomFile: 'pom.xml'
+          goals: 'clean package'
+          publishJUnitResults: true
+          testResultsFiles: '**/surefire-reports/TEST-*.xml'
+          javaHomeOption: 'JDKVersion'
+          mavenVersionOption: 'Default'
+          mavenAuthenticateFeed: false
+          effectivePomSkip: false
+          sonarQubeRunAnalysis: true
+          sqMavenPluginVersionChoice: 'latest'
       - task: SonarQubeAnalyze@6
         inputs:
           jdkversion: 'JAVA_HOME_17_X64'
