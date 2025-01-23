@@ -72,28 +72,4 @@
       </plugin>
     </plugins>
   </build>
-<repositories>
-  <repository>
-  <id>Nike</id>
-  <url>https://pkgs.dev.azure.com/ghosharnab6190866/Maven/_packaging/Nike/maven/v1</url>
-  <releases>
-    <enabled>true</enabled>
-  </releases>
-  <snapshots>
-    <enabled>true</enabled>
-  </snapshots>
-</repository>
-</repositories>
-<distributionManagement>
-<repository>
-  <id>Nike</id>
-  <url>https://pkgs.dev.azure.com/ghosharnab6190866/Maven/_packaging/Nike/maven/v1</url>
-  <releases>
-    <enabled>true</enabled>
-  </releases>
-  <snapshots>
-    <enabled>true</enabled>
-  </snapshots>
-</repository>
-</distributionManagement> 
 </project>
